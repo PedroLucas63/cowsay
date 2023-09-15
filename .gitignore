@@ -33,3 +33,6 @@ build
 
 # Tags from ctags
 tags
+
+# Visual Studio Code:
+/.vscode
