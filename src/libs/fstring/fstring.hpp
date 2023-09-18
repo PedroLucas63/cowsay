@@ -201,6 +201,7 @@ namespace fos {
      short const _background = background::none,
      short const _style = style::none);
 
+  size_t longestLine(std::string const& str);
 } // namespace fos
 
 #endif // FSTRING_HPP_

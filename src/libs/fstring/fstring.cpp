@@ -292,4 +292,16 @@ namespace fos {
 
       return text.str();
    }
+
+  size_t longestLine(std::string const& str) {
+   std::vector<std::string> lines { split(str, "\n") };
+   size_t max_size { lines.front().size() };
+   for (std::string line : lines) {
+      if (max_size < line.size()) {
+         max_size = line.size();
+      }
+   }
+
+   return max_size;
+  }
 } // namespace fos
