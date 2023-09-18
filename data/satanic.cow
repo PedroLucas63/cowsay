@@ -1,7 +1,7 @@
 ##
 ## Satanic cow, source unknown.
 ##
-$the_cow = <<EOC;
+$the_creature = <<EOC;
      $thoughts
       $thoughts  (__)  
          (\\/)  

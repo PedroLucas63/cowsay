@@ -2,7 +2,7 @@
 ## This 'Scowleton' brought to you by one of 
 ## {appel,kube,rowe}@csua.berkeley.edu
 ##
-$the_cow = <<EOC;
+$the_creature = <<EOC;
           $thoughts      (__)      
            $thoughts     /$eyes|  
             $thoughts   (_"_)*+++++++++*

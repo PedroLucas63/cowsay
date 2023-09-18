@@ -1,7 +1,7 @@
 ##
 ## A cute little wabbit
 ##
-$the_cow = <<EOC;
+$the_creature = <<EOC;
   $thoughts
    $thoughts   \\
         \\ /\\
