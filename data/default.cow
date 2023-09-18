@@ -1,0 +1,10 @@
+##
+## A default cow
+##
+$the_creature = <<EOC;
+             ^__^   $thoughts  
+     _______/($eyes)  $thoughts
+ /\\/(       /(__)             
+    | w---- | $tongue          
+    ||     ||                  
+EOC
