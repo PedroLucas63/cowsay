@@ -95,29 +95,29 @@ Argument const* CLIOptions::verifyArgument(char* argument) const {
       }
    }
 
-   return &arguments[UNDEFINED];
+   return &arguments[ARG_UNDEFINED];
 };
 
 // Handles basic configuration settings
 void CLIOptions::getBasicConfig(Argument const* argument) {
-   if (argument == &arguments[HELP]) {
+   if (argument == &arguments[ARG_HELP]) {
       printHelp();
       execute = false;
-   } else if (argument == &arguments[BORG]) {
-      creature_configs.mood = 'b';
-   } else if (argument == &arguments[DEAD]) {
-      creature_configs.mood = 'd';
-   } else if (argument == &arguments[GREEDY]) {
-      creature_configs.mood = 'g';
-   } else if (argument == &arguments[PARANOIA]) {
-      creature_configs.mood = 'p';
-   } else if (argument == &arguments[TIRED]) {
-      creature_configs.mood = 't';
-   } else if (argument == &arguments[WIRED]) {
-      creature_configs.mood = 'w';
-   } else if (argument == &arguments[YOUNG]) {
-      creature_configs.mood = 'y';
-   } else if (argument == &arguments[REGULAR]) {
+   } else if (argument == &arguments[ARG_BORG]) {
+      creature_configs.mood = Moods::BORG;
+   } else if (argument == &arguments[ARG_DEAD]) {
+      creature_configs.mood = Moods::DEAD;
+   } else if (argument == &arguments[ARG_GREEDY]) {
+      creature_configs.mood = Moods::GREEDY;
+   } else if (argument == &arguments[ARG_PARANOIA]) {
+      creature_configs.mood = Moods::PARANOIA;
+   } else if (argument == &arguments[ARG_TIRED]) {
+      creature_configs.mood = Moods::TIRED;
+   } else if (argument == &arguments[ARG_WIRED]) {
+      creature_configs.mood = Moods::WIRED;
+   } else if (argument == &arguments[ARG_YOUNG]) {
+      creature_configs.mood = Moods::YOUNG;
+   } else if (argument == &arguments[ARG_REGULAR]) {
       billboard_configs.regular = true;
    }
 }
@@ -141,44 +141,51 @@ void CLIOptions::printHelp() {
 // Handles compound configuration settings
 void CLIOptions::getCompostConfig(
   Argument const* argument, std::string complementary) {
-   if (argument == &arguments[EYES]) {
+   if (argument == &arguments[ARG_EYES]) {
       if (complementary.size() != EYES_SIZE) {
          throw std::invalid_argument(
            "Eyes must be exactly 2 characters long. The default will be set.");
       } else {
          creature_configs.eyes = complementary;
       }
-   } else if (argument == &arguments[TONGUE]) {
+   } else if (argument == &arguments[ARG_TONGUE]) {
       if (complementary.size() != TONGUE_SIZE) {
          throw std::invalid_argument(
            "Eyes must be exactly 2 characters long. The default will be set.");
       } else {
          creature_configs.tongue = complementary;
       }
-   } else if (argument == &arguments[WRAP_COLUMN]) {
+   } else if (argument == &arguments[ARG_WRAP_COLUMN]) {
       try {
-         int column_size { std::stoi(complementary) };
+         int column_size;
+         try {
+            column_size = std::stoi(complementary);
+
+         } catch (std::invalid_argument& e) {
+            throw std::invalid_argument("The expected value must be of type "
+                                     "integer (int). The default will be set.");
+         }
 
          if (column_size < MIN_COLUMN || column_size > MAX_COLUMN) {
             throw std::invalid_argument("The column size must be in the range ["
               + std::to_string(MIN_COLUMN) + ", " + std::to_string(MAX_COLUMN)
               + "]. The default will be set.");
          } else {
-            billboard_configs.wrap_column = column_size;
+            billboard_configs.column_size = column_size;
          }
       } catch (std::invalid_argument& e) {
-         throw std::invalid_argument("The expected value must be of type "
-                                     "integer (int). The default will be set.");
+         throw std::invalid_argument(e.what());
       }
-   } else if (argument == &arguments[COW_FILE]) {
+
+   } else if (argument == &arguments[ARG_COW_FILE]) {
       creature_configs.creature = complementary;
-   } else if (argument == &arguments[ALIGNMENT]) {
+   } else if (argument == &arguments[ARG_ALIGNMENT]) {
       if (complementary == "l") {
-         billboard_configs.align = 'l';
+         billboard_configs.align = fos::left;
       } else if (complementary == "c") {
-         billboard_configs.align = 'c';
+         billboard_configs.align = fos::center;
       } else if (complementary == "r") {
-         billboard_configs.align = 'r';
+         billboard_configs.align = fos::right;
       } else {
          throw std::invalid_argument("The expected input must be 'l', 'c' or "
                                      "'r'. The default will be set.");
