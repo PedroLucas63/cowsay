@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]) {
    CLIOptions& cli { CLIOptions::getInstance() };
-   cli.getConfigs(argc, argv);
+   cli.setConfigs(argc, argv);
 
    if (cli.getExecute()) {
       cli.getPendingConfig();

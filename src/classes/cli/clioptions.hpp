@@ -57,6 +57,7 @@ Argument const arguments[] = { { BASIC, "-h" },
    { BASIC, "-t" },
    { BASIC, "-w" },
    { BASIC, "-y" },
+   { BASIC, "-f" },
    { COMPOST, "-E" },
    { COMPOST, "-T" },
    { COMPOST, "-F" },
@@ -78,6 +79,7 @@ enum ArgumentsEnumeration {
    ARG_TIRED,
    ARG_WIRED,
    ARG_YOUNG,
+   ARG_FLIP,
    ARG_EYES,
    ARG_TONGUE,
    ARG_COW_FILE,
@@ -115,13 +117,13 @@ class CLIOptions {
    static void destruct();
 
    /**
-    * @brief Get the configurations for billboards and creatures from
+    * @brief Set the configurations for billboards and creatures from
     * command-line arguments
     *
     * @param arguments_count The number of command-line arguments
     * @param arguments The command-line arguments
     */
-   void getConfigs(int arguments_count, char* arguments[]);
+   void setConfigs(int arguments_count, char* arguments[]);
 
    /**
     * @brief Get the billboard configurations
@@ -222,8 +224,7 @@ class CLIOptions {
     * arguments
     * @param arguments The array of command-line arguments
     */
-   void getLostArguments(
-     int arguments_count, int& last_index, char* arguments[]);
+   int getLostArguments(int arguments_count, int last_index, char* arguments[]);
 
    /**
     * @brief Gets complex configuration settings based on a command-line

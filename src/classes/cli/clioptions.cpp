@@ -1,13 +1,15 @@
 /**
  * @file clioptions.cpp
  * @author Pedro Lucas (pedrolucas.jsrn@gmail.com)
- * @brief Implementation of the CLIOptions class for handling command-line options.
+ * @brief Implementation of the CLIOptions class for handling command-line
+ * options.
  * @version 0.1
  * @date 2023-09-15
  *
- * This file contains the implementation of the CLIOptions class, which is responsible for
- * parsing and managing command-line options for the application. It defines functions to
- * retrieve and handle various command-line configurations.
+ * This file contains the implementation of the CLIOptions class, which is
+ * responsible for parsing and managing command-line options for the
+ * application. It defines functions to retrieve and handle various command-line
+ * configurations.
  *
  *
  * @copyright Copyright (c) 2023
@@ -34,7 +36,7 @@ void CLIOptions::destruct() {
 }
 
 // Parses command-line arguments to obtain configurations
-void CLIOptions::getConfigs(int arguments_count, char* arguments[]) {
+void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
    for (int index { FIRST_ARGUMENT }; index < arguments_count; ++index) {
       Argument const* argument = verifyArgument(arguments[index]);
 
@@ -56,13 +58,12 @@ void CLIOptions::getConfigs(int arguments_count, char* arguments[]) {
               fos::foreground::red)
                       << "\n";
          }
-
       } else if (argument->type == COMPLEX) {
          // getComplexConfig(argument, arguments, index);
       }
 
       if (argument->type == NONE || invalid_element) {
-         getLostArguments(arguments_count, index, arguments);
+         index = getLostArguments(arguments_count, index, arguments);
       }
    }
 }
@@ -119,6 +120,8 @@ void CLIOptions::getBasicConfig(Argument const* argument) {
       creature_configs.mood = Moods::YOUNG;
    } else if (argument == &arguments[ARG_REGULAR]) {
       billboard_configs.regular = true;
+   } else if (argument == &arguments[ARG_FLIP]) {
+      flip = true;
    }
 }
 
@@ -133,8 +136,8 @@ void CLIOptions::printHelp() {
    std::cout << "\t\t- tongue     is a 2-character string. Ex.: ' U'.\n";
    std::cout
      << "\t\t- cowfile    is a text file that contains a cow description.\n";
-   std::cout
-     << "\t\t- alignment  `c` means center aligned, `r` means right aligned.\n";
+   std::cout << "\t\t- alignment  `c` means center aligned, `r` means right "
+                "aligned, 'j' means justify aligned.\n";
    std::cout << "\t\t- wrapcolunm is an integer value in [1,100].\n";
 }
 
@@ -162,8 +165,9 @@ void CLIOptions::getCompostConfig(
             column_size = std::stoi(complementary);
 
          } catch (std::invalid_argument& e) {
-            throw std::invalid_argument("The expected value must be of type "
-                                     "integer (int). The default will be set.");
+            throw std::invalid_argument(
+              "The expected value must be of type "
+              "integer (int). The default will be set.");
          }
 
          if (column_size < MIN_COLUMN || column_size > MAX_COLUMN) {
@@ -186,22 +190,26 @@ void CLIOptions::getCompostConfig(
          billboard_configs.align = fos::center;
       } else if (complementary == "r") {
          billboard_configs.align = fos::right;
+      } else if (complementary == "j") {
+         billboard_configs.align = fos::justify;
       } else {
-         throw std::invalid_argument("The expected input must be 'l', 'c' or "
-                                     "'r'. The default will be set.");
+         throw std::invalid_argument("The expected input must be 'l', 'c', "
+                                     "'r' or 'j'. The default will be set.");
       }
    }
 }
 
 // Retrieves lost command-line arguments
-void CLIOptions::getLostArguments(
-  int arguments_count, int& last_index, char* arguments[]) {
+int CLIOptions::getLostArguments(
+  int arguments_count, int last_index, char* arguments[]) {
    lost_arguments_size = arguments_count - last_index;
    lost_arguments = new std::string[lost_arguments_size];
 
    for (int l_index { 0 }; l_index < lost_arguments_size; l_index++) {
       lost_arguments[l_index] = arguments[last_index++];
    }
+
+   return last_index;
 }
 
 // Handles complex configuration settings (currently commented out)
