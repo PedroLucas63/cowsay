@@ -2,9 +2,9 @@
 ## A default cow
 ##
 $the_creature = <<EOC;
-             ^__^   $thoughts  
-     _______/($eyes)  $thoughts
- /\\/(       /(__)             
-    | w---- | $tongue          
-    ||     ||                  
+        $thoughts   ^__^
+         $thoughts  ($eyes)\\_______
+            (__)\\       )\\/\\
+             $tongue ||----w |
+                ||     ||
 EOC
