@@ -42,9 +42,9 @@ constexpr fos::align DEFAULT_ALIGN {
    fos::align::left
 }; ///< Default text alignment
 
-/**
- *
- */
+constexpr const char* DEFAULT_CREATURE {
+   "./data/default.cow"
+}; ///< Default creature file used in the project
 constexpr Moods DEFAULT_MOOD {
    Moods::DEFAULT
 }; ///< Default mood used in the project
@@ -72,7 +72,7 @@ struct BillboardConfigs {
  * features
  */
 struct CreatureConfigs {
-   std::string creature; ///< The file of the creature
+   std::string creature { DEFAULT_CREATURE }; ///< The file of the creature
    Moods mood {
       DEFAULT_MOOD
    }; ///< The mood of the creature (e.g., 'b' for borg, 'd' for dead).
