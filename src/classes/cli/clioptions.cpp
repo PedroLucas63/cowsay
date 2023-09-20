@@ -63,7 +63,7 @@ void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
       }
 
       if (argument->type == NONE || invalid_element) {
-         index = getLostArguments(arguments_count, index, arguments);
+         index = getLostArguments(arguments_count, ++index, arguments);
       }
    }
 }
@@ -112,6 +112,8 @@ void CLIOptions::getBasicConfig(Argument const* argument) {
       creature_configs.mood = Moods::GREEDY;
    } else if (argument == &arguments[ARG_PARANOIA]) {
       creature_configs.mood = Moods::PARANOIA;
+   } else if (argument == &arguments[ARG_STONED]) {
+      creature_configs.mood = Moods::STONED;
    } else if (argument == &arguments[ARG_TIRED]) {
       creature_configs.mood = Moods::TIRED;
    } else if (argument == &arguments[ARG_WIRED]) {
