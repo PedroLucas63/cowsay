@@ -228,5 +228,9 @@ void CLIOptions::getPendingConfig() {
       while (std::getline(std::cin, line)) {
          billboard_configs.text += line + '\n';
       }
+
+      if (billboard_configs.text.empty()) {
+         execute = false;
+      }
    }
 }

@@ -34,10 +34,10 @@ int main(int argc, char* argv[]) {
    }; // Get an instance of CLIOptions
    cli.setConfigs(
      argc, argv); // Set configurations based on command-line arguments
+   cli.getPendingConfig(); // Retrieve pending configurations
 
    // Check if the '--execute' option is provided
    if (cli.getExecute()) {
-      cli.getPendingConfig(); // Retrieve pending configurations
       draw(cli.getBillboardsConfigs(),
         cli.getCreatureConfigs(),
         cli.getFlip()); // Generate a graphical display
