@@ -234,6 +234,31 @@ namespace fos {
    std::string completeLines(
      std::string const& str, std::string _complete = " ", size_t _column = 0);
 
+   /**
+    * @brief Inverts characters in a given string according to specific rules
+    *
+    * This function takes a string as input and inverts certain characters based
+    * on predefined rules
+    * - '(' is inverted to ')'
+    * - ')' is inverted to '('
+    * - '[' is inverted to ']'
+    * - ']' is inverted to '['
+    * - '{' is inverted to '}'
+    * - '}' is inverted to '{'
+    * - '\' is inverted to '/'
+    * - '/' is inverted to '\'
+    * - '<' is inverted to '>'
+    * - '>' is inverted to '<'
+    * Other characters remain unchanged
+    *
+    * @param str The input string to be processed
+    * @return A new string with characters inverted according to the specified
+    * rules
+    */
+   std::string invertCharacters(std::string const& str);
+
+   std::string invertCharacters(std::string const& str);
+
 } // namespace fos
 
 #endif // FSTRING_HPP_

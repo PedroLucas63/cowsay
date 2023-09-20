@@ -354,4 +354,37 @@ namespace fos {
       return concat(&lines.front(), &(lines.back()) + 1, "\n");
    }
 
+   // Inverts characters in a given string according to specific rules
+   std::string invertCharacters(std::string const& str) {
+      std::string new_string;
+
+      for (size_t index { 0 }; index < str.length(); ++index) {
+         if (str[index] == '(') {
+            new_string.push_back(')');
+         } else if (str[index] == ')') {
+            new_string.push_back('(');
+         } else if (str[index] == '[') {
+            new_string.push_back(']');
+         } else if (str[index] == ']') {
+            new_string.push_back('[');
+         } else if (str[index] == '{') {
+            new_string.push_back('}');
+         } else if (str[index] == '}') {
+            new_string.push_back('{');
+         } else if (str[index] == '\\') {
+            new_string.push_back('/');
+         } else if (str[index] == '/') {
+            new_string.push_back('\\');
+         } else if (str[index] == '<') {
+            new_string.push_back('>');
+         } else if (str[index] == '>') {
+            new_string.push_back('<');
+         } else {
+            new_string.push_back(str[index]);
+         }
+      }
+
+      return new_string;
+   }
+
 } // namespace fos
