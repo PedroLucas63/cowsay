@@ -165,8 +165,8 @@ namespace fos {
 
    // Justifies text within a specified width and alignment
    template <typename T>
-   std::string justify(std::string& str, size_t size, align _align, T _element,
-     bool _dynamic_size, bool _right_space) {
+   std::string alignment(std::string& str, size_t size, align _align,
+     T _element, bool _dynamic_size, bool _right_space) {
       std::ostringstream justified;
       std::vector<std::string> phrases { split(str, "\n") };
 
@@ -186,19 +186,49 @@ namespace fos {
       }
 
       for (std::string& phrase : phrases) {
-         size_t free_space { size - phrase.length() };
+         std::string trimmed { fos::trim(phrase) };
+         size_t free_space { size - trimmed.length() };
          bool is_even { free_space % 2 == 0 };
 
          if (_align == align::left) {
-            justified << phrase;
+            justified << trimmed;
          } else if (_align == align::center) {
-            justified << repeat(_element, free_space / 2, true) << phrase;
+            justified << repeat(_element, free_space / 2, true) << trimmed;
             free_space /= 2;
          } else if (_align == align::right) {
-            justified << repeat(_element, free_space, true) << phrase;
+            justified << repeat(_element, free_space, true) << trimmed;
+         } else if (_align == align::justify) {
+            std::vector<std::string> words { fos::split(trimmed, " ") };
+
+            if (words.size() == 0) {
+               justified << fos::repeat(_element, free_space, true);
+            } else if (words.size() == 1) {
+               justified << words.front()
+                         << fos::repeat(_element, free_space, true);
+            } else {
+               size_t spaces { words.size() + free_space - 1 };
+               size_t spaces_per_word { spaces / (words.size() - 1) };
+               size_t spaces_truncated { spaces % (words.size() - 1) };
+
+               for (std::string& word : words) {
+                  if (word == words.back()) {
+                     break;
+                  }
+
+                  justified << word
+                            << fos::repeat(_element, spaces_per_word, true);
+
+                  if (spaces_truncated != 0) {
+                     justified << repeat(_element, 1, true);
+                     --spaces_truncated;
+                  }
+               }
+
+               justified << words.back();
+            }
          }
 
-         if (_right_space && _align == align::left) {
+         if (_right_space && (_align == align::left)) {
             justified << repeat(_element, free_space, true);
          } else if (_right_space && _align == align::center) {
             free_space += !is_even ? 1 : 0;
@@ -211,19 +241,19 @@ namespace fos {
       return justified.str();
    }
 
-   template std::string justify<char>(std::string& str, size_t size,
+   template std::string alignment<char>(std::string& str, size_t size,
      align _align, char _element = ' ', bool _dynamic_size, bool _right_space);
-   template std::string justify<char const*>(std::string& str, size_t size,
+   template std::string alignment<char const*>(std::string& str, size_t size,
      align _align, char const* _element = " ", bool _dynamic_size,
      bool _right_space);
-   template std::string justify<std::string>(std::string& str, size_t size,
+   template std::string alignment<std::string>(std::string& str, size_t size,
      align _align, std::string _element = " ", bool _dynamic_size,
      bool _right_space);
-   template std::string justify<int>(std::string& str, size_t size,
+   template std::string alignment<int>(std::string& str, size_t size,
      align _align, int _element = 0, bool _dynamic_size, bool _right_space);
-   template std::string justify<float>(std::string& str, size_t size,
+   template std::string alignment<float>(std::string& str, size_t size,
      align _align, float _element = 0, bool _dynamic_size, bool _right_space);
-   template std::string justify<double>(std::string& str, size_t size,
+   template std::string alignment<double>(std::string& str, size_t size,
      align _align, double _element = 0, bool _dynamic_size, bool _right_space);
 
    // Concatenates a collection of strings with a specified separator
@@ -293,15 +323,35 @@ namespace fos {
       return text.str();
    }
 
-  size_t longestLine(std::string const& str) {
-   std::vector<std::string> lines { split(str, "\n") };
-   size_t max_size { lines.front().size() };
-   for (std::string line : lines) {
-      if (max_size < line.size()) {
-         max_size = line.size();
+   // Finds the length of the longest line in a string
+   size_t longestLine(std::string const& str) {
+      std::vector<std::string> lines { split(str, "\n") };
+      size_t max_size { lines.front().size() };
+
+      for (std::string line : lines) {
+         if (max_size < line.size()) {
+            max_size = line.size();
+         }
       }
+
+      return max_size;
    }
 
-   return max_size;
-  }
+   // Completes each line of a string with a specified text and adjusts to a
+   // minimum column width
+   std::string completeLines(
+     std::string const& str, std::string _complete, size_t _column) {
+      if (_column == 0) {
+         _column = longestLine(str);
+      }
+
+      std::vector<std::string> lines { split(str, "\n") };
+
+      for (std::string& line : lines) {
+         line += repeat(_complete, _column - line.size(), true);
+      }
+
+      return concat(&lines.front(), &(lines.back()) + 1, "\n");
+   }
+
 } // namespace fos

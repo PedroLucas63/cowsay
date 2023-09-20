@@ -29,6 +29,7 @@ namespace fos {
       left, /**< Left alignment */
       right, /**< Right alignment */
       center, /**< Center alignment */
+      justify,
    };
 
    /**
@@ -141,7 +142,8 @@ namespace fos {
     *
     * @param str Input string to be justified
     * @param size Desired size for justification
-    * @param _align Alignment (left, right, or center) (default: align::left)
+    * @param _align Alignment (left, right, center or justify) (default:
+    * align::left)
     * @param _element Element to pad the string with (default: ' ')
     * @param _dynamic_size If true, the size is automatically set to match the
     * widest line (default: false)
@@ -155,7 +157,7 @@ namespace fos {
     * "_element" parameter accepts the same data types as the "repeat" function.
     */
    template <typename T>
-   std::string justify(std::string& str, size_t size,
+   std::string alignment(std::string& str, size_t size,
      align _align = align::left, T _element = ' ', bool _dynamic_size = false,
      bool _right_space = false);
 
@@ -201,7 +203,37 @@ namespace fos {
      short const _background = background::none,
      short const _style = style::none);
 
-  size_t longestLine(std::string const& str);
+   /**
+    * @brief Find the length of the longest line in a string
+    *
+    * This function calculates and returns the length of the longest line
+    * within a given input string
+    *
+    * @param str The input string to analyze
+    * @return The length of the longest line in the input string
+    */
+   size_t longestLine(std::string const& str);
+
+   /**
+    * @brief Complete each line of a string with a specified string
+    *
+    * This function takes an input string, completes each line of the string
+    * with a specified completion string, and ensures that each line has a
+    * minimum column width
+    *
+    * @param str The input string to process
+    * @param _complete The string used to complete each line (default is " ")
+    * @param _column The minimum column width (default is 0)
+    * @return The string with each line completed and adjusted to the minimum
+    *         column width
+    *
+    * @note This function is useful for maintaining formatting when inverting
+    *       drawings or designs stored as strings where spaces on the left may
+    *       not be preserved when inverted
+    */
+   std::string completeLines(
+     std::string const& str, std::string _complete = " ", size_t _column = 0);
+
 } // namespace fos
 
 #endif // FSTRING_HPP_
