@@ -59,7 +59,7 @@ class Creature {
    /**
     * @brief Draw the creature's design
     */
-   void draw();
+   void drawCreature();
 
    private:
    std::string body; ///< The body design of the creature

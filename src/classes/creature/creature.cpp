@@ -32,7 +32,7 @@ std::string Creature::getCreature() const {
 }
 
 // Draw the creature's design, optionally flipping it.
-void Creature::draw() {
+void Creature::drawCreature() {
    std::cout << creature;
 }
 
