@@ -11,30 +11,43 @@
  * @copyright Copyright (c) 2023
  */
 
-#include <string>
 #include "fstring.hpp"
+#include <string>
 
 #ifndef UTILS_HPP_
 #define UTILS_HPP_
 
+/**
+ * @enum Moods
+ * @brief Enumerates different moods.
+ *
+ * This enumeration defines various moods that can be associated with a
+ * creature.
+ */
 enum Moods {
-   DEFAULT,
-   BORG,
-   DEAD,
-   GREEDY,
-   PARANOIA,
-   STONED,
-   TIRED,
-   WIRED,
-   YOUNG,
+   DEFAULT, ///< Default mood
+   BORG, ///< Borg mood
+   DEAD, ///< Dead mood
+   GREEDY, ///< Greedy mood
+   PARANOIA, ///< Paranoia mood
+   STONED, ///< Stoned mood
+   TIRED, ///< Tired mood
+   WIRED, ///< Wired mood
+   YOUNG, ///< Young mood
 };
 
-constexpr bool DEFAULT_REGULAR { false };
-constexpr size_t DEFAULT_COLUMN_SIZE { 40 };
-constexpr fos::align DEFAULT_ALIGN { fos::align::left };
+constexpr bool DEFAULT_REGULAR { false }; ///< Default value for regular text
+constexpr size_t DEFAULT_COLUMN_SIZE { 40 }; ///< Default column size for text
+constexpr fos::align DEFAULT_ALIGN {
+   fos::align::left
+}; ///< Default text alignment
 
-constexpr char* DEFAULT_CREATURE { "./data/default.cow" };
-constexpr Moods DEFAULT_MOOD { Moods::DEFAULT };
+/**
+ *
+ */
+constexpr Moods DEFAULT_MOOD {
+   Moods::DEFAULT
+}; ///< Default mood used in the project
 
 /**
  * @brief Structure that defines configurations for a billboard
@@ -43,11 +56,13 @@ constexpr Moods DEFAULT_MOOD { Moods::DEFAULT };
  */
 struct BillboardConfigs {
    std::string text; ///< The text to be displayed on the billboard
-   bool regular { DEFAULT_REGULAR }; ///< Specifies whether the text is regular (true) or special
-                 ///< (false)
-   size_t column_size { DEFAULT_COLUMN_SIZE }; ///< The column limit for automatic line breaks
-   fos::align align { DEFAULT_ALIGN }; ///< The alignment of the text (e.g., 'l' for left, 'c' for
-               ///< centered)
+   bool regular { DEFAULT_REGULAR }; ///< Specifies whether the text is regular
+                                     ///< (true) or special (false)
+   size_t column_size {
+      DEFAULT_COLUMN_SIZE
+   }; ///< The column limit for automatic line breaks
+   fos::align align { DEFAULT_ALIGN }; ///< The alignment of the text (e.g., 'l'
+                                       ///< for left, 'c' for centered)
 };
 
 /**
@@ -57,8 +72,10 @@ struct BillboardConfigs {
  * features
  */
 struct CreatureConfigs {
-   std::string creature { DEFAULT_CREATURE }; ///< The file of the creature
-   Moods mood { DEFAULT_MOOD }; ///< The mood of the creature (e.g., 'b' for borg, 'd' for dead).
+   std::string creature; ///< The file of the creature
+   Moods mood {
+      DEFAULT_MOOD
+   }; ///< The mood of the creature (e.g., 'b' for borg, 'd' for dead).
    std::string eyes; ///< The appearance of the creature's eyes
    std::string tongue; ///< The appearance of the creature's tongue
 };
