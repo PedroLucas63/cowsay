@@ -23,31 +23,35 @@ Creature::Creature(
    eyes = eyes_;
    tongue = tongue_;
    flip = flip_;
+   defineDesign();
+}
+
+// Returns the representation of the creature
+std::string Creature::getCreature() const {
+   return creature;
 }
 
 // Draw the creature's design, optionally flipping it.
 void Creature::draw() {
-   replaceDirectives();
-
-   if (!flip) {
-      std::cout << creature;
-   } else {
-      std::vector<std::string> lines { fos::split(creature, "\n") };
-      for (std::string line : lines) {
-         std::cout << fos::reverse(line) << '\n';
-      }
-   }
+   std::cout << creature;
 }
 
 // Replace special directives within the creature's design.
-void Creature::replaceDirectives() {
+void Creature::defineDesign() {
    creature = fos::replace(body, TAG_THOUGHTS, THOUGHTS);
    creature = fos::replace(creature, TAG_EYES, eyes);
    creature = fos::replace(creature, TAG_TONGUE, tongue);
 
-   creature = fos::completeLines(creature) + "\n";
-
    if (flip) {
+      creature = fos::completeLines(creature) + "\n";
       creature = fos::invertCharacters(creature);
+
+      std::vector<std::string> lines { fos::split(creature, "\n") };
+
+      for (size_t index { 0 }; index < lines.size(); ++index) {
+         lines[index] = fos::rightTrim(fos::reverse(lines[index]));
+      }
+
+      creature = fos::concat(&lines.front(), &lines.back() + 1, "\n") + "\n";
    }
 }

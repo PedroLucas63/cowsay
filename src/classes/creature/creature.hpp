@@ -48,6 +48,14 @@ class Creature {
    Creature(
      std::string body_, std::string eyes_, std::string tongue_, bool flip_);
 
+
+   /**
+    * @brief Get the complete creature's design.
+    *
+    * @return A string representing the creature's design.
+    */
+   std::string getCreature() const;
+
    /**
     * @brief Draw the creature's design
     */
@@ -61,12 +69,14 @@ class Creature {
    std::string creature; ///< The complete creature's design
 
    /**
-    * @brief Replace special directives within the creature's design
+    * @brief Replace special directives within the creature's design and
+    * optionally invert the design.
     *
     * This method replaces special directives like "$thoughts", "$eyes", and
-    * "$tongue" in the creature's design with their corresponding values
+    * "$tongue" in the creature's design with their corresponding values. If the
+    * 'flip' flag is set to true, the design is also inverted.
     */
-   void replaceDirectives();
+   void defineDesign();
 };
 
 #endif // CREATURE_HPP_
