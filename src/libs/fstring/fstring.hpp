@@ -236,7 +236,7 @@ namespace fos {
     * @param str The input string to analyze
     * @return The length of the longest line in the input string
     */
-   size_t longestLine(std::string const& str);
+   std::string longestLine(std::string const& str);
 
    /**
     * @brief Complete each line of a string with a specified string

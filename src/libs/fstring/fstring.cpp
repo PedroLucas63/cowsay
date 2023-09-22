@@ -113,13 +113,15 @@ namespace fos {
             split_tokens.push_back("\n");
             last_text = false;
             divided.erase(0, break_position + 1);
-         } else if (break_position != std::string::npos) {
+         } else if (break_position > text_position && break_position != std::string::npos) {
             split_tokens.push_back(subString(divided, break_position));
             divided.erase(0, break_position + 1);
             last_text = true;
-         } else {
+         } else if (break_position == std::string::npos) {
             split_tokens.push_back(subString(divided, divided.length()));
             divided.clear();
+         } else {
+            divided.erase(0, break_position + 1);
          }
       }
 
@@ -174,7 +176,6 @@ namespace fos {
          for (std::string& word : words) {
             if ((line + word).length() >= size) {
                text << line << '\n';
-
                while (word.length() >= size) {
                   text << subString(word, size) << '\n';
                   word.erase(0, size);
@@ -183,7 +184,8 @@ namespace fos {
                line.clear();
             }
 
-            line += word + _new_delimiter;
+            line += word;
+            line += &word != &words.back() ? _new_delimiter : "";
          }
 
          if (!line.empty()) {
@@ -191,7 +193,6 @@ namespace fos {
             line.clear();
          }
       }
-
       return text.str();
    }
 
@@ -202,19 +203,14 @@ namespace fos {
       std::ostringstream justified;
       std::vector<std::string> phrases { splitParagraphs(str) };
 
-      size_t max_size { 0 };
-
-      for (std::string& phrase : phrases) {
-         if (phrase.length() > max_size) {
-            max_size = phrase.length();
-         }
-      }
+      std::string longest_line { trim(longestLine(str)) };
+      size_t max_size { longest_line.length() };
 
       if (!_dynamic_size && max_size > size) {
          throw std::invalid_argument(
            "Some lines have a width greater than the defined width.");
-      } else if (_dynamic_size) {
-         size = max_size - 1;
+      } else if (_dynamic_size && max_size < size) {
+         size = max_size;
       }
 
       for (std::string& phrase : phrases) {
@@ -359,17 +355,23 @@ namespace fos {
    }
 
    // Finds the length of the longest line in a string
-   size_t longestLine(std::string const& str) {
+   std::string longestLine(std::string const& str) {
       std::vector<std::string> lines { split(str, "\n") };
-      size_t max_size { lines.front().size() };
+      std::string max_line { lines.front() };
+      std::string max_line_trimmed { trim(max_line) };
 
       for (std::string line : lines) {
-         if (max_size < line.size()) {
-            max_size = line.size();
+         std::string trimmed { trim(line) };
+         if (max_line.size() < line.size()) {
+            max_line = line;
+            max_line_trimmed = trim(line);
+         } else if (max_line.size() == line.size() && trimmed.size() > max_line_trimmed.size()) {
+            max_line = line;
+            max_line_trimmed = trim(line);
          }
       }
 
-      return max_size;
+      return max_line;
    }
 
    // Completes each line of a string with a specified text and adjusts to a
@@ -377,7 +379,7 @@ namespace fos {
    std::string completeLines(
      std::string const& str, std::string _complete, size_t _column) {
       if (_column == 0) {
-         _column = longestLine(str);
+         _column = longestLine(str).size();
       }
 
       std::vector<std::string> lines { split(str, "\n") };
