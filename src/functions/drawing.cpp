@@ -43,7 +43,7 @@ std::string getCreatureFile(std::string local) {
    file.open(local);
 
    if (!file.is_open()) {
-      file.open(DEFAULT_CREATURE);
+      return DEFAULT_CREATURE;
    }
 
    std::string creature;
