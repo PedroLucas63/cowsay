@@ -99,6 +99,33 @@ namespace fos {
       return split_tokens;
    }
 
+   // Splits a text into paragraphs while preserving blank lines
+   std::vector<std::string> splitParagraphs(std::string const& str) {
+      std::string divided { str };
+      std::vector<std::string> split_tokens;
+      bool last_text { false };
+
+      while (divided.find_first_not_of("\n") != std::string::npos) {
+         size_t break_position { divided.find_first_of("\n") };
+         size_t text_position { divided.find_first_not_of("\n") };
+
+         if (break_position < text_position && last_text) {
+            split_tokens.push_back("\n");
+            last_text = false;
+            divided.erase(0, break_position + 1);
+         } else if (break_position != std::string::npos) {
+            split_tokens.push_back(subString(divided, break_position));
+            divided.erase(0, break_position + 1);
+            last_text = true;
+         } else {
+            split_tokens.push_back(subString(divided, divided.length()));
+            divided.clear();
+         }
+      }
+
+      return split_tokens;
+   }
+
    // Repeats an element a specified number of times
    template <typename T>
    std::string repeat(T element, size_t times, bool _max_width) {
@@ -134,10 +161,15 @@ namespace fos {
      std::string _new_delimiter) {
       std::ostringstream text;
       std::string line;
-      std::vector<std::string> phrases { split(str, "\n") };
+      std::vector<std::string> phrases { splitParagraphs(str) };
 
       for (std::string& phrase : phrases) {
-         std::vector<std::string> words { split(phrase, _delimiter) };
+         std::string trimmed { trim(phrase) };
+         std::vector<std::string> words { split(trimmed, _delimiter) };
+
+         if (words.empty()) {
+            text << '\n';
+         }
 
          for (std::string& word : words) {
             if ((line + word).length() >= size) {
@@ -168,7 +200,7 @@ namespace fos {
    std::string alignment(std::string& str, size_t size, align _align,
      T _element, bool _dynamic_size, bool _right_space) {
       std::ostringstream justified;
-      std::vector<std::string> phrases { split(str, "\n") };
+      std::vector<std::string> phrases { splitParagraphs(str) };
 
       size_t max_size { 0 };
 
@@ -190,7 +222,9 @@ namespace fos {
          size_t free_space { size - trimmed.length() };
          bool is_even { free_space % 2 == 0 };
 
-         if (_align == align::left) {
+         if (trimmed.empty()) {
+            justified << repeat(_element, size, true);
+         } else if (_align == align::left) {
             justified << trimmed;
          } else if (_align == align::center) {
             justified << repeat(_element, free_space / 2, true) << trimmed;
@@ -211,7 +245,7 @@ namespace fos {
                size_t spaces_truncated { spaces % (words.size() - 1) };
 
                for (std::string& word : words) {
-                  if (word == words.back()) {
+                  if (&word == &words.back()) {
                      break;
                   }
 
@@ -228,9 +262,10 @@ namespace fos {
             }
          }
 
-         if (_right_space && _align == align::left) {
+         if (_right_space && _align == align::left && !trimmed.empty()) {
             justified << repeat(_element, free_space, true);
-         } else if (_right_space && _align == align::center) {
+         } else if (_right_space && _align == align::center
+           && !trimmed.empty()) {
             free_space += !is_even ? 1 : 0;
             justified << repeat(_element, free_space, true);
          }

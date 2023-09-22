@@ -107,6 +107,30 @@ namespace fos {
      std::string const& str, std::string _delimiter = " ");
 
    /**
+    * @brief Splits a text into paragraphs while preserving blank lines
+    *
+    * This function takes a text as input and divides it into paragraphs based
+    * on line breaks. It preserves blank lines, ensuring that the resulting
+    * paragraphs include all lines, even if they are empty, between the line
+    * breaks.
+    *
+    * @param str The text to be split into paragraphs
+    * @return A vector of strings representing the resulting paragraphs
+    *
+    * Example usage:
+    * @code
+    * std::string text = "Paragraph 1\n\n"
+    *                    "\n"
+    *                    "Paragraph 2\n"
+    *                    "Paragraph 3";
+    * std::vector<std::string> paragraphs = splitParagraphs(text);
+    * // paragraphs will contain {"Paragraph 1", "\n", "Paragraph 2",
+    * "Paragraph 3"}
+    * @endcode
+    */
+   std::vector<std::string> splitParagraphs(std::string const& str);
+
+   /**
     * @brief Repeat a given element a specified number of times
     *
     * @param element Element to be repeated
