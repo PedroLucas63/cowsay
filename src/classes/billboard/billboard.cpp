@@ -59,7 +59,16 @@ void Billboard::drawBillboard() {
 
 // Format the text on the billboard based on the specified settings
 void Billboard::formatText() {
-   if (!regular) {
+   if (regular) {
+      std::vector<std::string> lines { fos::split(text, "\n") };
+      size_t long_line { fos::longestLine(text) };
+
+      text.clear();
+
+      for (std::string& line : lines) {
+         text += fos::completeLines(line, " ", long_line) + "\n";
+      }
+   } else {
       text = fos::columnWrap(text, column_size);
       text = fos::alignment(text, column_size, alignment, ' ', true, true);
    }
