@@ -49,7 +49,6 @@ void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
             } catch (std::invalid_argument& e) {
                std::cerr << fos::setStyle(e.what(), fos::foreground::red)
                          << "\n";
-               invalid_element = true;
             }
          } else {
             std::cerr << fos::setStyle(
@@ -62,8 +61,8 @@ void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
          // getComplexConfig(argument, arguments, index);
       }
 
-      if (argument->type == NONE || invalid_element) {
-         index = getLostArguments(arguments_count, ++index, arguments);
+      if (argument->type == NONE) {
+         index = getLostArguments(arguments_count, index, arguments);
       }
    }
 }
@@ -207,7 +206,7 @@ int CLIOptions::getLostArguments(
    lost_arguments_size = arguments_count - last_index;
    lost_arguments = new std::string[lost_arguments_size];
 
-   for (int l_index { 0 }; l_index < lost_arguments_size; l_index++) {
+   for (int l_index { 0 }; l_index < lost_arguments_size; ++l_index) {
       lost_arguments[l_index] = arguments[last_index++];
    }
 
@@ -220,8 +219,8 @@ int CLIOptions::getLostArguments(
 
 // Retrieves pending configurations from lost arguments or standard input
 void CLIOptions::getPendingConfig() {
-   billboard_configs.text
-     = fos::concat(lost_arguments, lost_arguments + lost_arguments_size);
+   billboard_configs.text = fos::trim(
+     fos::concat(lost_arguments, lost_arguments + lost_arguments_size));
 
    if (billboard_configs.text.empty()) {
       std::string line;

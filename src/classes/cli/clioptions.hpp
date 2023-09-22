@@ -171,9 +171,6 @@ class CLIOptions {
    }; ///< Flag indicating if execution is enabled (default: true)
    std::string* lost_arguments; ///< Pointer to an array of lost arguments
    int lost_arguments_size; ///< The size of the lost arguments array
-   bool invalid_element {
-      false
-   }; ///< Flag indicating the presence of invalid elements
 
    /**
     * @brief Private constructor for creating a new CLIOptions object
