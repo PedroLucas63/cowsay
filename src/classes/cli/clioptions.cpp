@@ -65,10 +65,10 @@ void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
          std::string unknow_argument { arguments[index] };
 
          if (unknow_argument[0] == '-') {
-            std::cerr << fos::setStyle(
-            "Unknow option: " + fos::subString(unknow_argument, unknow_argument.length(), 1),
-            fos::foreground::red)
-                     << "\n";
+            std::cerr << fos::setStyle("Unknow option: "
+                + fos::subString(unknow_argument, unknow_argument.length(), 1),
+              fos::foreground::red)
+                      << "\n";
             ++index;
          }
 
@@ -165,7 +165,7 @@ void CLIOptions::getCompostConfig(
    } else if (argument == &arguments[ARG_TONGUE]) {
       if (complementary.size() != TONGUE_SIZE) {
          throw std::invalid_argument(
-           "Eyes must be exactly 2 characters long. The default will be set.");
+           "Tongue must be exactly 2 characters long. The default will be set.");
       } else {
          creature_configs.tongue = complementary;
       }
@@ -229,17 +229,19 @@ int CLIOptions::getLostArguments(
 
 // Retrieves pending configurations from lost arguments or standard input
 void CLIOptions::getPendingConfig() {
-   billboard_configs.text = fos::trim(
-     fos::concat(lost_arguments, lost_arguments + lost_arguments_size));
-
-   if (billboard_configs.text.empty()) {
-      std::string line;
-      while (std::getline(std::cin, line)) {
-         billboard_configs.text += line + '\n';
-      }
+   if (execute) {
+      billboard_configs.text = fos::trim(
+        fos::concat(lost_arguments, lost_arguments + lost_arguments_size));
 
       if (billboard_configs.text.empty()) {
-         execute = false;
+         std::string line;
+         while (std::getline(std::cin, line)) {
+            billboard_configs.text += line + '\n';
+         }
+
+         if (billboard_configs.text.empty()) {
+            execute = false;
+         }
       }
    }
 }
