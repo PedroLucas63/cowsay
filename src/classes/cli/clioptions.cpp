@@ -62,6 +62,16 @@ void CLIOptions::setConfigs(int arguments_count, char* arguments[]) {
       }
 
       if (argument->type == NONE) {
+         std::string unknow_argument { arguments[index] };
+
+         if (unknow_argument[0] == '-') {
+            std::cerr << fos::setStyle(
+            "Unknow option: " + fos::subString(unknow_argument, unknow_argument.length(), 1),
+            fos::foreground::red)
+                     << "\n";
+            ++index;
+         }
+
          index = getLostArguments(arguments_count, index, arguments);
       }
    }
