@@ -182,7 +182,7 @@ namespace fos {
          throw std::invalid_argument(
            "Some lines have a width greater than the defined width.");
       } else if (_dynamic_size) {
-         size = max_size;
+         size = max_size - 1;
       }
 
       for (std::string& phrase : phrases) {
@@ -228,7 +228,7 @@ namespace fos {
             }
          }
 
-         if (_right_space && (_align == align::left)) {
+         if (_right_space && _align == align::left) {
             justified << repeat(_element, free_space, true);
          } else if (_right_space && _align == align::center) {
             free_space += !is_even ? 1 : 0;
