@@ -26,7 +26,8 @@ void draw(BillboardConfigs billboard_configs, CreatureConfigs creature_configs,
       creature_str, creature_configs.eyes, creature_configs.tongue, flip
    };
 
-   size_t width_offset { flip ? fos::longestLine(creature.getCreature()) : 0 };
+   size_t width_offset { flip ? fos::longestLine(creature.getCreature()).size() : 0 };
+
    Billboard billboard { billboard_configs.text,
       billboard_configs.regular,
       billboard_configs.column_size,

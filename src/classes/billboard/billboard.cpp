@@ -30,7 +30,7 @@ Billboard::Billboard(std::string text_, bool regular_, size_t column_size_,
 // Draw the graphical text display on the billboard
 void Billboard::drawBillboard() {
    std::vector<std::string> lines { fos::split(text, "\n") };
-   size_t max_line_size { fos::longestLine(text) };
+   size_t max_line_size { fos::longestLine(text).size() };
    auto last { lines.end() - 1 };
 
    // Draw the top border of the billboard
@@ -60,13 +60,19 @@ void Billboard::drawBillboard() {
 // Format the text on the billboard based on the specified settings
 void Billboard::formatText() {
    if (regular) {
-      std::vector<std::string> lines { fos::split(text, "\n") };
-      size_t long_line { fos::longestLine(text) };
+      std::vector<std::string> lines { fos::splitParagraphs(text) };
+      size_t long_line { fos::longestLine(text).size() };
 
       text.clear();
 
       for (std::string& line : lines) {
-         text += fos::completeLines(line, " ", long_line) + "\n";
+         if (line == "\n") {
+            text += fos::repeat(' ', long_line);
+         } else {
+            text += fos::completeLines(line, " ", long_line);
+         }
+
+         text += "\n";
       }
    } else {
       text = fos::columnWrap(text, column_size);
