@@ -1,6 +1,6 @@
 # Cowsay Clone 🐄
 
-[![Download](https://img.shields.io/badge/Download-Cowsay%20Clone-blue.svg)](https://github.com/PedroLucas63/cowsay-clone/releases)
+[![Download](https://img.shields.io/badge/Download-Cowsay%20Clone-blue.svg)](https://github.com/PedroLucas63/cowsay/releases)
 
 ## Overview 🌟
 
